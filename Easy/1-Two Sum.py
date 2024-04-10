@@ -1,12 +1,9 @@
 def twoSum(nums, target):
     d = {}
-    for i in range(0, len(nums)):
-        d[nums[i]] = i
-    for i in range(0, len(nums)):
-        x = target - nums[i]
-        if x in d and i != d[x]:
-            return [i, d[x]]
-    return None
+    for index, i in enumerate(nums):
+        if d.get(i) is not None:
+            return[d.get(i), index]
+        d[target-i] = index
 
 
 nums = [2,7,11,15]
