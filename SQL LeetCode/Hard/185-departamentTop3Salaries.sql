@@ -1,30 +1,18 @@
-WITH RankedSalaries AS (
-    SELECT
-        e.name AS Employee,
-        e.salary AS Salary,
-        d.name AS Department,
-        RANK() OVER (
-            PARTITION BY e.departmentId
-            ORDER BY
-                e.salary DESC
-        ) AS SalaryRank
-    FROM
-        Employee e
-        INNER JOIN Department d ON e.departmentId = d.id
-),
-TopThreeSalaries AS (
-    SELECT
-        Employee,
-        Salary,
-        Department
-    FROM
-        RankedSalaries
-    WHERE
-        SalaryRank <= 3
-)
 SELECT
-    Department,
-    Employee,
+    Department.NAME AS Department,
+    Employee.NAME AS Employee,
     Salary
 FROM
-    TopThreeSalaries;
+    Employee,
+    Department
+WHERE
+    Employee.DepartmentId = Department.Id
+    AND (
+        SELECT
+            COUNT(DISTINCT e2.Salary)
+        FROM
+            Employee AS e2
+        WHERE
+            e2.Salary > Employee.Salary
+            AND Employee.DepartmentId = e2.DepartmentId
+    ) < 3;
