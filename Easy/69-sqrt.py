@@ -1,18 +1,22 @@
 class Solution:
+    def mySqrt(self, x: int) -> int:
+        if x < 2:
+            return x
 
-    def mySqrt(self, x: int,tolerance=1e-10) -> int:
-        if x < 0:
-            raise ValueError("Cannot compute the square root of a negative number")
-        if x == 0:
-            return 0
+        left, right = 0, x
 
-        x = x
-        while True:
-            root = 0.5 * (x + (x / x))
-            if abs(root - x) < tolerance:
-                return root
-            x = root
+        while left <= right:
+            mid = (left + right) // 2
+            mid_squared = mid * mid
 
+            if mid_squared == x:
+                return mid
+            elif mid_squared < x:
+                left = mid + 1
+            else:
+                right = mid - 1
+
+        return right
 
 
 sol = Solution()
